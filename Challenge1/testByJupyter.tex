@@ -1,0 +1,655 @@
+
+% Default to the notebook output style
+
+
+
+
+% Inherit from the specified cell style.
+
+
+
+
+
+\documentclass[11pt]{article}
+
+
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+
+
+
+
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{testByJupyter}
+
+
+
+
+    % Pygments definitions
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+
+
+    \begin{document}
+
+
+    \maketitle
+
+
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Now your turn \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} Lest\PYZsq{}s us say you are U19886 and you want to work at Google.}
+        \PY{c+c1}{\PYZsh{} Explore, implement your strategy to be helped in getting this job at Google.}
+        \PY{k+kn}{import} \PY{n+nn}{networkx} \PY{k}{as} \PY{n+nn}{nx}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k}{import} \PY{n}{pylab}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{pickle}
+
+        \PY{c+c1}{\PYZsh{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Let\PYZsq{}s take a quick NetworkX tour \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} load the graph}
+        \PY{n}{G} \PY{o}{=} \PY{n}{nx}\PY{o}{.}\PY{n}{read\PYZus{}gexf}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mediumLinkedin.gexf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} load the profiles. 3 files for each type of attribute}
+        \PY{c+c1}{\PYZsh{} Some nodes in G have no attributes, or just location, or all of same}
+        \PY{c+c1}{\PYZsh{} Some nodes may have 2 or more colleges or employers, so we}
+        \PY{c+c1}{\PYZsh{} use dictionaries to store the attributes}
+        \PY{n}{college} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{n}{location} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{n}{employer} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{c+c1}{\PYZsh{} The dictionaries are loaded as dictionaries from the disk (see pickle in Python doc)}
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mediumCollege.pickle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{handle}\PY{p}{:}
+            \PY{n}{college} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{handle}\PY{p}{)}
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mediumLocation.pickle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{handle}\PY{p}{:}
+            \PY{n}{location} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{handle}\PY{p}{)}
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mediumEmployer.pickle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{handle}\PY{p}{:}
+            \PY{n}{employer} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{handle}\PY{p}{)}
+
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nb of users with one or more attribute college: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb}{len}\PY{p}{(}\PY{n}{college}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nb of users with one or more attribute location: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb}{len}\PY{p}{(}\PY{n}{location}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nb of users with one or more attribute employer: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n+nb}{len}\PY{p}{(}\PY{n}{employer}\PY{p}{)}\PY{p}{)}
+
+        \PY{k}{def} \PY{n+nf}{findUserInfo}\PY{p}{(}\PY{n}{employeeNum}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{For User = }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{employeeNum}\PY{p}{)}
+            \PY{k}{if} \PY{n}{employeeNum} \PY{o+ow}{in} \PY{p}{[}\PY{n}{k} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{college}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{colleges exists}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{college}\PY{p}{[}\PY{n}{employeeNum}\PY{p}{]}\PY{p}{)}
+            \PY{k}{if} \PY{n}{employeeNum} \PY{o+ow}{in} \PY{p}{[}\PY{n}{k} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{employer}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{employer exists}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{employer}\PY{p}{[}\PY{n}{employeeNum}\PY{p}{]}\PY{p}{)}
+            \PY{k}{if} \PY{n}{employeeNum} \PY{o+ow}{in} \PY{p}{[}\PY{n}{k} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{location}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{location exists}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{location}\PY{p}{[}\PY{n}{employeeNum}\PY{p}{]}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Nb of users with one or more attribute college: 540
+Nb of users with one or more attribute location: 811
+Nb of users with one or more attribute employer: 730
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{clientNum} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{U19886}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{findUserInfo}\PY{p}{(}\PY{n}{clientNum}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+For User = U19886
+location exists
+['rockford illinois area']
+
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c+c1}{\PYZsh{} string matching Functions}
+        \PY{k}{def} \PY{n+nf}{strMatchDict}\PY{p}{(}\PY{n}{str1}\PY{p}{,}\PY{n}{dict2} \PY{p}{,} \PY{n}{jobNow} \PY{o}{=} \PY{k+kc}{False} \PY{p}{)}\PY{p}{:}
+            \PY{n}{users} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+            \PY{k}{if} \PY{n}{dict2} \PY{o}{!=} \PY{k+kc}{None} \PY{p}{:}
+                \PY{k}{if} \PY{n}{jobNow} \PY{o}{==} \PY{k+kc}{True}\PY{p}{:}
+                    \PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{dict2}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                        \PY{k}{if} \PY{n}{dict2}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{n}{str1}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{0}\PY{p}{:}
+                            \PY{n}{users}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{key}\PY{p}{)}
+                \PY{k}{else}\PY{p}{:}
+                    \PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{dict2}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                        \PY{k}{for} \PY{n}{str2} \PY{o+ow}{in} \PY{n}{dict2}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{:}
+                            \PY{k}{if} \PY{n}{str2}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{n}{str1}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{0}\PY{p}{:}
+                                \PY{n}{users}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{key}\PY{p}{)}
+                \PY{k}{return} \PY{n}{users}
+
+        \PY{k}{def} \PY{n+nf}{strMatchList}\PY{p}{(}\PY{n}{str1}\PY{p}{,}\PY{n}{list2} \PY{p}{)}\PY{p}{:}
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{list2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                \PY{k}{if} \PY{n}{list2}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{n}{str1}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n}{i}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{:}
+                        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{is working in}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+}\PY{n}{str1}
+                \PY{k}{elif} \PY{n}{list2}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{n}{str1}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n}{i} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{:}
+                        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{was working in}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+}  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+}\PY{n}{str1}
+            \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{not in }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{str1}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{n}{ggEmAll} \PY{o}{=} \PY{n}{strMatchDict}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{google}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{employer}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all google workers = }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{ggEmAll}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{ggEmNow} \PY{o}{=} \PY{n}{strMatchDict}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{google}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{employer}\PY{p}{,}\PY{k+kc}{True}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{actual google workers = }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{ggEmNow}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+all google workers = 35
+actual google workers = 23
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{c+c1}{\PYZsh{} Test Finished  }
+        \PY{c+c1}{\PYZsh{} Implementation of BFS}
+        \PY{k+kn}{import} \PY{n+nn}{queue} \PY{k}{as} \PY{n+nn}{Q}
+
+        \PY{n}{endPoint} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{dicPaths} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{n}{oldNum} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{q} \PY{o}{=} \PY{n}{Q}\PY{o}{.}\PY{n}{Queue}\PY{p}{(}\PY{p}{)}
+        \PY{n}{q}\PY{o}{.}\PY{n}{put}\PY{p}{(}\PY{n}{clientNum}\PY{p}{)}
+
+        \PY{n}{ggEmDegree} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{ggEmNow}\PY{p}{:}
+            \PY{n}{ggEmDegree}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{G}\PY{o}{.}\PY{n}{degree}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{,}\PY{n}{n} \PY{p}{)}\PY{p}{)}
+
+        \PY{n}{ggEmDegree} \PY{o}{=} \PY{p}{[}\PY{n}{m} \PY{k}{for} \PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{m}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{ggEmDegree}\PY{p}{,}\PY{n}{reverse}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{]}
+
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{3000}\PY{p}{)}\PY{p}{:}
+            \PY{n}{user} \PY{o}{=} \PY{n}{q}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{p}{)}
+            \PY{n}{oldNum}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{user}\PY{p}{)}
+            \PY{n}{ngbs} \PY{o}{=} \PY{n}{G}\PY{o}{.}\PY{n}{neighbors}\PY{p}{(}\PY{n}{user}\PY{p}{)}
+            \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{ngbs}\PY{p}{:}
+                \PY{k}{if} \PY{n}{n} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{oldNum}\PY{p}{:}
+                    \PY{n}{q}\PY{o}{.}\PY{n}{put}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+                    \PY{n}{dicPaths}\PY{p}{[}\PY{n}{n}\PY{p}{]} \PY{o}{=} \PY{n}{user}
+                    \PY{k}{if} \PY{n}{n} \PY{o+ow}{in} \PY{n}{ggEmDegree}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}\PY{o+ow}{and} \PY{n}{n} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{endPoint}\PY{p}{:}
+                        \PY{n+nb}{print}\PY{p}{(}\PY{n}{n}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ worked in Google}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                        \PY{n}{endPoint}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+U7202 worked in Google
+U24154 worked in Google
+U19913 worked in Google
+U24080 worked in Google
+U27661 worked in Google
+U27494 worked in Google
+U4568 worked in Google
+U3955 worked in Google
+U11558 worked in Google
+U4010 worked in Google
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{c+c1}{\PYZsh{} Get and find the path!}
+        \PY{n}{Roads} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{endPoint}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Roads}\PY{p}{[}\PY{n}{endPoint}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{endPoint}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}
+            \PY{n}{beforeP} \PY{o}{=} \PY{n}{dicPaths}\PY{p}{[}\PY{n}{endPoint}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}
+            \PY{k}{while}\PY{p}{(}\PY{n}{beforeP} \PY{o}{!=} \PY{n}{clientNum}\PY{p}{)}\PY{p}{:}
+                \PY{n}{Roads}\PY{p}{[}\PY{n}{endPoint}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{insert}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{beforeP}\PY{p}{)}
+                \PY{n}{beforeP} \PY{o}{=} \PY{n}{dicPaths}\PY{p}{[}\PY{n}{beforeP}\PY{p}{]}
+            \PY{n}{Roads}\PY{p}{[}\PY{n}{endPoint}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{insert}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{clientNum}\PY{p}{)}
+
+
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} Fastest Path and EndPointDegree }
+         \PY{n}{Way1} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{key}\PY{p}{)} \PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{Roads}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+         \PY{n}{Way1} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{Way1}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{Way1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}  \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{s Degree is  }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{G}\PY{o}{.}\PY{n}{degree}\PY{p}{(}\PY{n}{Way1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fastest Path is }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+U7202's Degree is  5
+
+
+Fastest Path is
+	['U19886', 'U7091', 'U7167', 'U7024', 'U7202']
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{} Show fastest path\PYZsq{}s infomation}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{findUserInfo}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+For User = U19886
+location exists
+['rockford illinois area']
+
+
+For User = U7091
+employer exists
+['illinois college advising corps']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7167
+colleges exists
+['university of illinois']
+employer exists
+['champaign-urbana special recreation', 'old navy']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7024
+colleges exists
+['university of illinois at urbana-champaign']
+employer exists
+['university of illinois at urbana-champaign']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7202
+employer exists
+['google', 'university of illinois at urbana-champaign']
+location exists
+['san francisco bay area']
+
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} Biggest Degree Path}
+         \PY{n}{Way2} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{n}{G}\PY{o}{.}\PY{n}{degree}\PY{p}{(}\PY{n}{key}\PY{p}{)}\PY{p}{,}\PY{n}{key}\PY{p}{)} \PY{k}{for} \PY{n}{key} \PY{o+ow}{in} \PY{n}{Roads}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+         \PY{n}{Way2} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{Way2}\PY{p}{,}\PY{n}{reverse} \PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{Way2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{s Degree is  }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{G}\PY{o}{.}\PY{n}{degree}\PY{p}{(}\PY{n}{Way2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Biggest degree Path is }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+U3955's Degree is  19
+
+
+Biggest degree Path is
+	['U19886', 'U7091', 'U7167', 'U7024', 'U7319', 'U7256', 'U27287',
+		'U27585', 'U27661', 'U11597', 'U3919', 'U3955']
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} Show Biggest degree path\PYZsq{}s infomation}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{findUserInfo}\PY{p}{(}\PY{n}{Roads}\PY{p}{[}\PY{n}{Way2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+For User = U19886
+location exists
+['rockford illinois area']
+
+
+For User = U7091
+employer exists
+['illinois college advising corps']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7167
+colleges exists
+['university of illinois']
+employer exists
+['champaign-urbana special recreation', 'old navy']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7024
+colleges exists
+['university of illinois at urbana-champaign']
+employer exists
+['university of illinois at urbana-champaign']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7319
+colleges exists
+['university of illinois at urbana-champaign']
+employer exists
+['amazon', 'neustar inc.', 'university of illinois at urbana-champaign']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U7256
+colleges exists
+['university of illinois at urbana-champaign']
+employer exists
+['university of illinois at urbana-champaign']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U27287
+colleges exists
+['university of illinois at urbana-champaign', 'shanghai jiao tong university',
+	'university of new mexico', 'hong kong university of science and technology']
+employer exists
+['university of illinois at urbana-champaign']
+location exists
+['urbana-champaign illinois area']
+
+
+For User = U27585
+colleges exists
+['east china normal university software engineering institute']
+employer exists
+['apple', 'university of pittsburgh school of information science', 'haoban digital co.']
+location exists
+['san francisco bay area']
+
+
+For User = U27661
+colleges exists
+['shanghai jiao tong university']
+employer exists
+['google', 'at\&amp;t labs inc.', 'university of michigan']
+location exists
+['san francisco bay area']
+
+
+For User = U11597
+employer exists
+['baidu inc.']
+location exists
+['beijing city china']
+
+
+For User = U3919
+colleges exists
+['fudan university']
+employer exists
+['mediav', 'yahoo! beijing r\&amp;d', 'alibaba cloud computing company',
+	'microsoft global technology supporting center']
+location exists
+['shanghai city china']
+
+
+For User = U3955
+employer exists
+['google']
+location exists
+['china']
+
+
+
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+
+
+
+    \end{document}
