@@ -1,5 +1,3 @@
-from typing import List, Any, Union, Tuple
-
 import PIL as im
 import numpy as np
 from matplotlib import pyplot as plt
@@ -7,6 +5,37 @@ import time
 from heapq import heappop as pop
 from heapq import heappush as push
 from random import shuffle
+from math import radians, cos, sin, asin, sqrt
+
+def haversine(lat1, lat2, lon1,lon2):
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    lat1, lat2,lon1,lon2 = map(radians, [lat1, lat2,lon1,lon2])
+
+    # haversine equation
+    dlon1 = lon2-lon1
+    dlat1 = lat2 - lat1
+    a1 = sin(dlat1 / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon1 / 2) ** 2
+    c1 = 2 * asin(sqrt(a1))
+    r1 = 6371  #  radium of earth
+    return c1 * r1
+
+def deployTemp(temp_one_day):
+    """
+
+    :return:
+    """
+    (x,y) = temp_one_day.shape
+    lat_pixel = {}
+    for i in range(x):
+        lat1 = temp_one_day[i,0]
+        lon1 = temp_one_day[i,1]
+        del_x = haversine(lat1, lat1-1,lon1,lon1)
+        del_y = haversine(lat1, lat1, lon1, lon1-1)
+        lat_pixel[lat1] = np.ceil((del_x,del_y))
+    return lat_pixel
 
 
 def findIndexInMap(g_map, val):
@@ -28,8 +57,52 @@ def preprocessing():
     output: g_normalised : ndarray, normalised map, element will represent the the weight
             start and end : points in form of tuple (x,y)
             img: ndarrat, loaded image in black and white
+            tem_img: ndarray,365 images with useful temperature information
 
     """
+
+    # generate 365 images with temperature information
+    pre_t = time.time()
+    file_name = "Temperature_Rize2Brest.npy"
+    f = open(file_name, 'rb')
+
+    # temperature[a,b,c]
+    # a: day
+    # b: location
+    # c: attribute(0:latidude   1:longitude  2:temperature in degree C in range of (0,18))
+    temperature = np.load(f)
+    print("Reading temperature.npy takes ", time.time() - pre_t, "s")
+    print("data shape ", temperature.shape)
+    f.close()
+
+    ######################################################################################
+    m = deployTemp(temperature[0, :, :])
+
+    # Reduce the scale of Image
+    x1 = 1280
+    x2 = 2200
+    y1 = 600
+    y2 = 4450
+    brest = (1306 - x1, 669 - y1)
+    rize = (2108 - x1, 4426 - y1)
+    (x, y, z) = temperature.shape
+
+    tmp_img = np.zeros((x, x2 - x1, y2 - y1))
+    for day in range(x):
+        x_t = 0
+        y_t = 0
+        index = 0
+        for line in range(y):
+            lat, longi, t = temperature[day, line, :]
+            del_x, del_y = m[lat]
+            tmp_img[day, int(x_t):int(np.round(x_t + del_x)), int(y_t):int(np.round(y_t + del_y+10))] = t
+            y_t = y_t + del_y+10
+            index += 1
+            if index % 46 == 0:  # 45 longitude slots
+                # print(lat,longi,t)
+                index = 0
+                x_t = x_t + del_x
+                y_t = 0
 
     # read image RGB from this directory
     input_filename = "D:\IMT_Atlantique\S4\ELU501\Challenge3\population-density-map.bmp"
@@ -39,11 +112,7 @@ def preprocessing():
     G_orig = np.array(img)
 
     # Reduce the scale of Image
-    # x1 = 980
-    # x2 = 2200
-    # y1 = 600
-    # y2 = 4450
-    # G_orig = G_orig[x1:x2,y1:y2]
+    G_orig = G_orig[x1:x2,y1:y2]
 
     # Find start point whose color is green and end point with red
     mask = np.all(G_orig == (255, 0, 0), axis=-1)
@@ -58,7 +127,7 @@ def preprocessing():
     G_gray = np.float32((np.array(img_gray)))
 
     # reduce the scale in order to avoid useless calculate
-    # G_gray = G_gray[x1:x2,y1:y2]
+    G_gray = G_gray[x1:x2,y1:y2]
 
     ###****** First normalization:
     #   Normalize the values of all elements of the ndarray between 0 and 1
@@ -76,7 +145,7 @@ def preprocessing():
     print("Values are the time which zombies need to cross the pixel")
     print(np.unique(g_normalised, return_counts=True))
 
-    return g_normalised, startPoint[0][0], startPoint[1][0], endPoint[0][0], endPoint[1][0], G_orig
+    return g_normalised, startPoint[0][0], startPoint[1][0], endPoint[0][0], endPoint[1][0], G_orig, tmp_img
 
 
 def drawImg(np_img, dpi,imgName):
@@ -102,15 +171,14 @@ def drawImg(np_img, dpi,imgName):
 pre_pro = time.time()
 
 # preprocessing() will prepare the map and start point and end point and also the loaded image
-g_map, x_start, y_start, x_end, y_end, img, = preprocessing()
-# # Test Paris
-# x_start,y_start = (1250, 1200)
-# g_map = g_map[:x_start+100,:y_start+100]
-# img = img[:x_start+100,:y_start+100]
+g_map, x_start, y_start, x_end, y_end, img, tmp_img = preprocessing()
+
+
 print('-- In New Graph --- ')
 print('startPoint is ', (x_start, y_start))
 print('endPoint is ', (x_end, y_end))
 print("map shape is", g_map.shape)
+print('temperature shape',tmp_img.shape)
 ##################################################################################################
 ### Use Dijkstra algo to find the shortest path between the startPoint and other pixel
 ## Variable engaged
@@ -119,7 +187,7 @@ start = (x_start, y_start)
 end = (x_end, y_end)
 shape = g_map.shape
 
-# Minimum heap, which will pop the smallest value 
+# Minimum heap, which will pop the smallest value
 heap = []
 
 # Find the previous pixel by the current pixel {current pixel: previous pixel}
@@ -132,7 +200,7 @@ distances = {}
 forbidden_zone = []
 
 ## Preperation for the algo
-# fist position is start point and push start point into the heap 
+# fist position is start point and push start point into the heap
 now = start
 push(heap, (g_map[start], start))
 
@@ -160,14 +228,13 @@ def nbrs(now, g_map):
             if a[0] < 0 or a[1] < 0 or a[0] >= g_map.shape[0] or a[1] >= g_map.shape[1]:
                 continue
             surround.append(a)
-
-    # Randomly return a list of neighbors without any preference, like 'going up first'
     shuffle(surround)
     return surround
 
 def reachable(now,g_map,previous):
     """
         Juge the current pixel having weight 24 is reachable or not
+            and also if the temperature will be below 0 for a week
     """
     for i in range(10):
         if now not in previous.keys():
@@ -179,8 +246,39 @@ def reachable(now,g_map,previous):
         now = last
     return False
 
+def reachable_temperature(now,tmp_img,distance):
+    """
+        Juge the current pixel is reachable if the temperature will be higher than 0 at least one day in the next week
+    """
+    if distance > 999999999:  # new pixel.
+        return True
+    day = int(np.round(distance / 24) % 365)
+    for i in range(7):
+        t = tmp_img[day+i,now[0],now[1]]
+        if t>0:
+            return True
+    return False
+
+def time_with_temperature(time_org,tmp_img,now,distance):
+    """
+    A star algo, function to calculate the cost: time .
+                    will return the period cause temperature influence the speed
+    """
+    if distance > 999999999:  # new pixel.
+        t = tmp_img[0,now[0],now[1]]
+    else:  # calculate which day  in order to find the proper temperature
+        day = int(np.round(distance / 24) % 365)
+        t = tmp_img[day,now[0],now[1]]
+
+    # Calculate when temperature =< 0, zombie will be still , when t >=18 zombie move as usual
+    old_speed = 1/time_org
+    new_speed = old_speed * (t/18)
+    if new_speed == 0:
+        return float('inf')
+    return (1/new_speed)
+
 ## Finding the shortest path algorithms begin from here
-print('Dij: Calculate distance between start point and other point')
+print('A start: Calculate distance between start point and other point')
 i = 0
 j = 0
 # when heap-min is empty , finish
@@ -191,10 +289,10 @@ while heap:
     # Analyze the neighbors of current pixel
     for nbr in nbrs(thisNode, g_map):
         # Juge if this pixel is reachable
-        if reachable(nbr, g_map, previous):
+        if reachable(nbr, g_map,previous) and reachable_temperature(nbr,tmp_img,distances[nbr]):
             # Here we iterate the 'distance'
                 # Change the distance function means change Dij -> A*
-            distance_nbr = thisWeight + g_map[nbr]
+            distance_nbr = thisWeight + time_with_temperature(g_map[nbr],tmp_img,nbr,thisWeight)
 
             # Renew the distance and previous if we have a better one
             if distances[nbr] > distance_nbr:
@@ -216,45 +314,39 @@ while heap:
         b = time.time()
         print('heapq length is ', len(heap))
 
-print('Dijsktra: Distance takes %.3f' % (time.time() - a), 's')
+print('A star: Calculate Distance takes %.3f' % (time.time() - a), 's')
 print("Unreachable pixel number ", len(forbidden_zone))
-print('It will take ', distances[end], ' hours to arrive at ', (x_start, y_start))
+print('It will take %.3f '% distances[end], ' hours to arrive at ', (x_start, y_start))
 
 #########################################################
-# ## store the distance and previous step these two dictionaries in local as a pickle file
-
+## store the distance and previous step these two dictionaries in local as a pickle file
 import pickle
 print("Store the previous step into a file in order to reuse it in the test file")
-output = open("D:\IMT_Atlantique\S4\ELU501\Challenge3\previous_zombie.pkl", "wb")
+output = open("D:\IMT_Atlantique\S4\ELU501\Challenge3\previous_zombie_with_t.pkl", "wb")
 pickle.dump(previous, output)
 output.close()
 print("Store the distance into a file in order to reuse it in the test file")
-output = open("D:\IMT_Atlantique\S4\ELU501\Challenge3\distance_zombie.pkl", "wb")
+output = open("D:\IMT_Atlantique\S4\ELU501\Challenge3\distance_zombie_with_t.pkl", "wb")
 pickle.dump(distances, output)
 output.close()
 ## Storage End
 
 
 
-#########################################################
-# Reform the path and draw the shortest path in image
-path = []
-now = end
-np_img = np.int32(np.array(img))
-while now != start:
-    pre = previous[now]
-    path.append(pre)
-    now = pre
-print('length of the path is', len(path))
-
-for i in range(len(path)):
-    np_img[path[i][0], path[i][1]] = (255, 0, 0)
-
-
-# Show whole image with the shortest path in 2000 dpi
-drawImg(np_img, 3000,"zombie_path_only_population.png")
-
-# The time for arriving at Brest is 8842h if considering the propagation speed
-#   depending on the population of humain linear.
-# That means it will take 368days and 10h to come to Brest!!!!!!!!
-
+# #########################################################
+# # Reform the path and draw the shortest path in image
+# path = []
+# now = end
+# np_img = np.int32(np.array(img))
+# while now != start:
+#     pre = previous[now]
+#     path.append(pre)
+#     now = pre
+# print('length of the path is', len(path))
+#
+# for i in range(len(path)):
+#     np_img[path[i][0], path[i][1]] = (255, 0, 0)
+#
+#
+# # Show whole image with the shortest path in 2000 dpi
+# drawImg(np_img, 2000,"zombie_path_with_t.png")
